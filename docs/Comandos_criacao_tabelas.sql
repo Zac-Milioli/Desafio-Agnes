@@ -1,0 +1,18 @@
+CREATE TABLE projeto (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    status VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE cliente (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    projeto_id INT NOT NULL REFERENCES projeto(id) ON DELETE CASCADE
+);
+
+CREATE TABLE atividade (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    projeto_id INT NOT NULL REFERENCES projeto(id) ON DELETE CASCADE,
+    cliente_id INT NOT NULL REFERENCES cliente(id) ON DELETE CASCADE
+);
