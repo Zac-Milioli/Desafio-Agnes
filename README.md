@@ -8,7 +8,7 @@ A documentação da API REST pode ser encontrada em [Documentação REST](https:
 
 O banco de dados utilizado é o Postgres. Para o correto funcionamento do sistema, é necessário que o Postgres esteja instalado na máquina e as tabelas criadas de acordo.
 O script para criação de tabelas e inserção de dados iniciais pode ser encontrado em [Comandos para Criação das Tabelas](https://github.com/Zac-Milioli/Desafio-Agnes/blob/master/docs/Comandos_criacao_tabelas.sql)
-Insira a senha utilizada no banco dentro de "conn" nos arquivos:
+Insira a senha utilizada no banco, nome da database e porta dentro de "conn" nos arquivos:
 - backend\src\model\atividade.py
 - backend\src\model\cliente.py
 - backend\src\model\projeto.py
