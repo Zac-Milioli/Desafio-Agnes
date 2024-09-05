@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import atividade_routes, cliente_routes, projeto_routes
+from src.routes import atividade_routes, cliente_routes, projeto_routes
 import uvicorn
 
 app = FastAPI()
