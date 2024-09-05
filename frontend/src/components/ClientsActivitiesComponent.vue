@@ -115,9 +115,9 @@ export default {
       const client = this.clients.find(client => client.id === clientId);
       return client ? client.nome : 'Desconhecido';
     },
-    selectClient(client) {
+    async selectClient(client) {
       this.selectedClient = client;
-      this.fetchClientActivities(client.id);
+      await this.fetchClientActivities(client.id);
     },
     showCreateClientForm() {
       this.resetClientForm();
