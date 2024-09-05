@@ -44,8 +44,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'ClientsActivitiesComponent',
   data() {
@@ -73,15 +71,15 @@ export default {
   methods: {
     fetchData() {
       const projectId = this.$route.params.id;
-      axios.get(`http://localhost:5000/projeto/${projectId}`)
+      this.$axios.get(`/projeto/${projectId}`)
         .then(response => {
           this.projectName = response.data.nome;
         });
-      axios.get(`http://localhost:5000/projeto/${projectId}/cliente`)
+      this.$axios.get(`/projeto/${projectId}/cliente`)
         .then(response => {
           this.clients = response.data;
         });
-      axios.get(`http://localhost:5000/projeto/${projectId}/atividade`)
+      this.$axios.get(`/projeto/${projectId}/atividade`)
         .then(response => {
           this.activities = response.data;
         });
@@ -99,13 +97,13 @@ export default {
     submitClientForm() {
       const projectId = this.$route.params.id;
       if (this.isEditingClient) {
-        axios.put(`http://localhost:5000/api/cliente/${this.clientForm.id}`, this.clientForm)
+        this.$axios.put(`/api/cliente/${this.clientForm.id}`, this.clientForm)
           .then(() => {
             this.fetchData();
             this.cancelClientForm();
           });
       } else {
-        axios.post(`http://localhost:5000/api/cliente`, { ...this.clientForm, projeto_id: projectId })
+        this.$axios.post(`/api/cliente`, { ...this.clientForm, projeto_id: projectId })
           .then(() => {
             this.fetchData();
             this.cancelClientForm();
@@ -117,7 +115,7 @@ export default {
       this.clientForm = { id: null, nome: '' };
     },
     deleteClient(id) {
-      axios.delete(`http://localhost:5000/api/cliente/${id}`)
+      this.$axios.delete(`/api/cliente/${id}`)
         .then(() => {
           this.fetchData();
         });
@@ -135,13 +133,13 @@ export default {
     submitActivityForm() {
       const projectId = this.$route.params.id;
       if (this.isEditingActivity) {
-        axios.put(`http://localhost:5000/api/atividade/${this.activityForm.id}`, this.activityForm)
+        this.$axios.put(`/api/atividade/${this.activityForm.id}`, this.activityForm)
           .then(() => {
             this.fetchData();
             this.cancelActivityForm();
           });
       } else {
-        axios.post(`http://localhost:5000/api/atividade`, { ...this.activityForm, projeto_id: projectId })
+        this.$axios.post(`/api/atividade`, { ...this.activityForm, projeto_id: projectId })
           .then(() => {
             this.fetchData();
             this.cancelActivityForm();
@@ -153,7 +151,7 @@ export default {
       this.activityForm = { id: null, nome: '' };
     },
     deleteActivity(id) {
-      axios.delete(`http://localhost:5000/api/atividade/${id}`)
+      this.$axios.delete(`/api/atividade/${id}`)
         .then(() => {
           this.fetchData();
         });

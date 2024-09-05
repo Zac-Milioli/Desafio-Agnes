@@ -1,20 +1,25 @@
 <template>
-  <div>
+  <div class="projects-container">
     <h1>Meus Projetos</h1>
-    <div v-for="status in projectStatuses" :key="status">
-      <h2>{{ status }}</h2>
-      <ul>
-        <li v-for="project in filteredProjects(status)" :key="project.id">
-          <span @click="goToClientsActivities(project)">{{ project.nome }}</span>
-          <button @click="editProject(project)">Editar</button>
-          <button @click="deleteProject(project.id)">Excluir</button>
-        </li>
-      </ul>
-    </div>
-    <button @click="showCreateProjectForm">Criar Novo Projeto</button>
+    <button class="create-button" @click="showCreateProjectForm">Criar Projeto</button>
 
-    <!-- Formulário de Criação/Edição de Projeto -->
-    <div v-if="showForm">
+    <div v-for="status in projectStatuses" :key="status" class="status-section">
+      <h2>{{ status }}</h2>
+      <div class="cards-container">
+        <div v-for="project in filteredProjects(status)" :key="project.id" class="project-card">
+          <div @click="goToClientsActivities(project)" class="card-content">
+            <h3>{{ project.nome }}</h3>
+            <p>Status: {{ project.status }}</p>
+          </div>
+          <div class="card-actions">
+            <button @click="editProject(project)">Editar</button>
+            <button @click="deleteProject(project.id)">Excluir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="showForm" class="form-container">
       <h2>{{ isEditing ? 'Editar Projeto' : 'Criar Novo Projeto' }}</h2>
       <form @submit.prevent="isEditing ? updateProject() : createProject()">
         <label for="nome">Nome:</label>
@@ -33,14 +38,12 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'ProjectsComponent',
   data() {
     return {
       projects: [],
-      projectStatuses: ['Concluído', 'Cancelado', 'Em andamento'],
+      projectStatuses: ['Em andamento', 'Concluído', 'Cancelado'],
       showForm: false,
       isEditing: false,
       form: {
@@ -55,7 +58,7 @@ export default {
   },
   methods: {
     fetchProjects() {
-      axios.get('http://localhost:5000/projeto')
+      this.$axios.get('/projeto')
         .then(response => {
           this.projects = response.data;
         });
@@ -72,7 +75,7 @@ export default {
       this.isEditing = false;
     },
     createProject() {
-      axios.post('http://localhost:5000/api/projeto', this.form)
+      this.$axios.post('/api/projeto', this.form)
         .then(() => {
           this.fetchProjects();
           this.showForm = false;
@@ -84,14 +87,14 @@ export default {
       this.isEditing = true;
     },
     updateProject() {
-      axios.put(`http://localhost:5000/api/projeto/${this.form.id}`, this.form)
+      this.$axios.put(`/api/projeto/${this.form.id}`, this.form)
         .then(() => {
           this.fetchProjects();
           this.showForm = false;
         });
     },
     deleteProject(id) {
-      axios.delete(`http://localhost:5000/api/projeto/${id}`)
+      this.$axios.delete(`/api/projeto/${id}`)
         .then(() => {
           this.fetchProjects();
         });
@@ -109,3 +112,106 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.projects-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  padding: 20px;
+}
+
+.create-button {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.create-button:hover {
+  background-color: #005a9e;
+}
+
+.status-section {
+  margin-bottom: 40px;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.project-card {
+  background-color: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  padding: 20px;
+  width: 300px;
+  cursor: pointer;
+}
+
+.project-card:hover {
+  background-color: #e1dfdd;
+}
+
+.card-content {
+  margin-bottom: 10px;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-actions button {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.card-actions button:hover {
+  background-color: #005a9e;
+}
+
+.form-container {
+  background-color: #f3f2f1;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+  padding: 20px;
+  width: 300px;
+  margin-top: 20px;
+}
+
+.form-container form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container label {
+  margin-bottom: 5px;
+}
+
+.form-container input,
+.form-container select {
+  margin-bottom: 10px;
+  padding: 5px;
+  border: 1px solid #e1dfdd;
+  border-radius: 4px;
+}
+
+.form-container button {
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #005a9e;
+}
+</style>
