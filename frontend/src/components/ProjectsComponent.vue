@@ -61,6 +61,9 @@ export default {
       this.$axios.get('/projeto')
         .then(response => {
           this.projects = response.data;
+        })
+        .catch(error => {
+          console.error('Erro ao buscar projetos:', error);
         });
     },
     filteredProjects(status) {
@@ -79,6 +82,9 @@ export default {
         .then(() => {
           this.fetchProjects();
           this.showForm = false;
+        })
+        .catch(error => {
+          console.error('Erro ao criar projeto:', error);
         });
     },
     editProject(project) {
@@ -91,12 +97,18 @@ export default {
         .then(() => {
           this.fetchProjects();
           this.showForm = false;
+        })
+        .catch(error => {
+          console.error('Erro ao atualizar projeto:', error);
         });
     },
     deleteProject(id) {
       this.$axios.delete(`/api/projeto/${id}`)
         .then(() => {
           this.fetchProjects();
+        })
+        .catch(error => {
+          console.error('Erro ao excluir projeto:', error);
         });
     },
     cancelForm() {
