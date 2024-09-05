@@ -34,8 +34,8 @@ html, body {
 }
 
 .fade-in {
-  animation: fadeIn 2s;
-  font-size: 5em; /* Título grande */
+  animation: fadeIn 4s;
+  font-size: 10em; /* Título grande */
   margin-bottom: 20px;
 }
 

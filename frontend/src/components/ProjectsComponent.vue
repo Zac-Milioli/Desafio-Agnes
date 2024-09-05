@@ -46,17 +46,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'ProjectsComponent',
   data() {
     return {
-      projects: [
-        { id: 1, nome: 'Projeto A', status: 'Em andamento' },
-        { id: 2, nome: 'Projeto B', status: 'Concluído' },
-        { id: 3, nome: 'Projeto C', status: 'Cancelado' },
-        { id: 4, nome: 'Projeto D', status: 'Em andamento' },
-        { id: 5, nome: 'Projeto E', status: 'Concluído' }
-      ],
+      projects: [], // Lista de projetos inicializada vazia
       projectStatuses: ['Em andamento', 'Concluído', 'Cancelado'],
       showForm: false,
       isEditing: false,
@@ -112,7 +108,18 @@ export default {
         nome: '',
         status: ''
       };
+    },
+    async fetchProjects() {
+      try {
+        const response = await axios.get('http://localhost:5000/projects'); // Ajuste a URL conforme necessário
+        this.projects = response.data;
+      } catch (error) {
+        console.error('Erro ao buscar projetos:', error);
+      }
     }
+  },
+  mounted() {
+    this.fetchProjects();
   }
 }
 </script>
