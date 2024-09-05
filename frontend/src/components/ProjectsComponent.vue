@@ -52,9 +52,7 @@ export default {
   name: 'ProjectsComponent',
   data() {
     return {
-      projects: [
-        {"id": 1, "nome": "Mock", "status": "Em andamento"}
-      ], // Lista de projetos inicializada vazia
+      projects: [], // Lista de projetos inicializada vazia
       projectStatuses: ['Em andamento', 'Concluído', 'Cancelado'],
       showForm: false,
       isEditing: false,
@@ -79,11 +77,11 @@ export default {
     },
     async createProject() {
       try {
-        const response = await axios.post('http://127.0.0.1:5000/api/projeto', {
+        await axios.post('http://127.0.0.1:5000/api/projeto', {
           nome: this.form.nome,
           status: this.form.status
         });
-        this.projects.push(response.data);
+        this.fetchProjects(); // Atualiza a lista de projetos após a criação
         this.showForm = false;
       } catch (error) {
         console.error('Erro ao criar projeto:', error);
@@ -96,14 +94,11 @@ export default {
     },
     async updateProject() {
       try {
-        const response = await axios.put(`http://127.0.0.1:5000/api/projeto/${this.form.id}`, {
+        await axios.put(`http://127.0.0.1:5000/api/projeto/${this.form.id}`, {
           nome: this.form.nome,
           status: this.form.status
         });
-        const index = this.projects.findIndex(p => p.id === this.form.id);
-        if (index !== -1) {
-          this.projects.splice(index, 1, response.data);
-        }
+        this.fetchProjects(); // Atualiza a lista de projetos após a atualização
         this.showForm = false;
       } catch (error) {
         console.error('Erro ao atualizar projeto:', error);
@@ -112,7 +107,7 @@ export default {
     async deleteProject(id) {
       try {
         await axios.delete(`http://127.0.0.1:5000/api/projeto/${id}`);
-        this.projects = this.projects.filter(project => project.id !== id);
+        this.fetchProjects(); // Atualiza a lista de projetos após a exclusão
       } catch (error) {
         console.error('Erro ao excluir projeto:', error);
       }
