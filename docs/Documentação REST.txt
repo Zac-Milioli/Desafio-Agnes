@@ -1,0 +1,242 @@
+﻿FUNCIONAMENTO
+
+
+        Dentro desta API são oferecidas as possibilidades de criar, editar, remover e retornar clientes, projetos e atividades. Para os requests de criar e editar, é necessário enviar os dados devidos dentro do body da requisição. Todas as trocas de dados são feitas por JSON.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+REQUISIÇÕES DE PROJETO
+*ADENDO: o valor de “status” deve ser "Em andamento","Concluído" ou "Cancelado"
+
+
+Buscar todos os projetos:
+                Request: GET 
+URL: http://127.0.0.1:5000/projeto
+Retorno: {[“lista_de_jsons_de_projetos”]}
+
+
+Buscar projeto específico:
+        Request: GET
+        URL: http://127.0.0.1:5000/projeto/{id}
+                Retorno: {
+“id”: id, 
+“nome”: “nome_do_projeto”,
+“status”: “status”
+}
+
+
+        Buscar atividades de um projeto:
+                Request: GET
+                URL: http://127.0.0.1:5000/projeto/{id}/atividade 
+                Retorno: {[“lista_de_jsons_de_atividades”]}
+        
+        Buscar clientes de um projeto:
+                Request: GET
+                URL: http://127.0.0.1:5000/projeto/{id}/cliente  
+                Retorno: {[“lista_de_jsons_de_clientes”]}
+
+
+Criação de projeto:
+        Request: POST
+        URL: http://127.0.0.1:5000/api/projeto
+        body: {
+“nome”: “nome_do_projeto”,
+“status”: “status_do_projeto”
+}
+
+
+        Edição de projeto:
+                Request: PUT
+                URL: http://127.0.0.1:5000/api/projeto/{id}
+                body: {
+“nome”: “nome_do_projeto”,
+“status”: “status_do_projeto”
+}
+        
+        Exclusão de projeto:
+                Request: DELETE
+URL: http://127.0.0.1:5000/api/projeto/{id}  
+
+
+REQUISIÇÕES DE CLIENTE
+
+
+        Buscar todos os clientes:
+                Request: GET 
+URL: http://127.0.0.1:5000/cliente
+Retorno: {[“lista_de_jsons_de_clientes”]}
+
+
+Buscar cliente específico:
+        Request: GET
+        URL: http://127.0.0.1:5000/cliente/{id} 
+        Retorno: {
+“id”: id,
+“nome”: “nome_do_cliente”,
+“projeto_id”: id_do_projeto
+}
+
+
+        Buscar atividades do cliente:
+                Request: GET
+                URL: http://127.0.0.1:5000/cliente/{id}/atividade 
+                Retorno: {[“lista_de_jsons_de_atividades”]}
+
+
+Criação de cliente:
+        Request: POST
+        URL: http://127.0.0.1:5000/api/cliente 
+        body: {
+“nome”: “nome_do_projeto”,
+“projeto_id”: id_do_projeto
+}
+
+
+        Edição de cliente:
+                Request: PUT
+                URL: http://127.0.0.1:5000/api/cliente/{id}  
+                body: {
+“nome”: “nome_do_cliente”,
+“projeto_id”: id_do_projeto
+}
+        
+        Exclusão de cliente:
+                Request: DELETE
+URL: http://127.0.0.1:5000/api/cliente/{id}   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+REQUISIÇÕES DE ATIVIDADE
+
+
+        Buscar todas as atividades:
+                Request: GET 
+URL: http://127.0.0.1:5000/atividade   
+Retorno: {[“lista_de_jsons_de_atividades”]}
+
+
+        Buscar atividade específica:
+                Request: GET 
+URL: http://127.0.0.1:5000/atividade/{id}    
+Retorno: {
+        “id”: id,
+        “nome”: “nome_da_atividade”,
+        “projeto_id”: id_do_projeto,
+        “cliente_id”: id_do_cliente
+}
+
+
+Criação de atividade:
+        Request: POST
+        URL: http://127.0.0.1:5000/api/atividade  
+        body: {
+“nome”: “nome_da_atividade”,
+“cliente_id”: “id_do_cliente”,
+“projeto_id”: “id_do_projeto”
+}
+
+
+        Edição de atividade:
+                Request: PUT
+                URL: http://127.0.0.1:5000/api/atividade/{id}   
+                body: {
+“nome”: “nome_da_atividade”,
+“cliente_id”: id_do_cliente,
+“projeto_id”: id_do_projeto
+}
+        
+        Exclusão de atividade:
+                Request: DELETE
+URL: http://127.0.0.1:5000/api/atividade/{id}

@@ -73,15 +73,15 @@ export default {
   methods: {
     fetchData() {
       const projectId = this.$route.params.id;
-      axios.get(`/api/projects/${projectId}`)
+      axios.get(`http://localhost:5000/projeto/${projectId}`)
         .then(response => {
           this.projectName = response.data.nome;
         });
-      axios.get(`/api/projects/${projectId}/clients`)
+      axios.get(`http://localhost:5000/projeto/${projectId}/cliente`)
         .then(response => {
           this.clients = response.data;
         });
-      axios.get(`/api/projects/${projectId}/activities`)
+      axios.get(`http://localhost:5000/projeto/${projectId}/atividade`)
         .then(response => {
           this.activities = response.data;
         });
@@ -99,13 +99,13 @@ export default {
     submitClientForm() {
       const projectId = this.$route.params.id;
       if (this.isEditingClient) {
-        axios.put(`/api/clients/${this.clientForm.id}`, this.clientForm)
+        axios.put(`http://localhost:5000/api/cliente/${this.clientForm.id}`, this.clientForm)
           .then(() => {
             this.fetchData();
             this.cancelClientForm();
           });
       } else {
-        axios.post(`/api/projects/${projectId}/clients`, this.clientForm)
+        axios.post(`http://localhost:5000/api/cliente`, { ...this.clientForm, projeto_id: projectId })
           .then(() => {
             this.fetchData();
             this.cancelClientForm();
@@ -117,7 +117,7 @@ export default {
       this.clientForm = { id: null, nome: '' };
     },
     deleteClient(id) {
-      axios.delete(`/api/clients/${id}`)
+      axios.delete(`http://localhost:5000/api/cliente/${id}`)
         .then(() => {
           this.fetchData();
         });
@@ -135,13 +135,13 @@ export default {
     submitActivityForm() {
       const projectId = this.$route.params.id;
       if (this.isEditingActivity) {
-        axios.put(`/api/activities/${this.activityForm.id}`, this.activityForm)
+        axios.put(`http://localhost:5000/api/atividade/${this.activityForm.id}`, this.activityForm)
           .then(() => {
             this.fetchData();
             this.cancelActivityForm();
           });
       } else {
-        axios.post(`/api/projects/${projectId}/activities`, this.activityForm)
+        axios.post(`http://localhost:5000/api/atividade`, { ...this.activityForm, projeto_id: projectId })
           .then(() => {
             this.fetchData();
             this.cancelActivityForm();
@@ -153,7 +153,7 @@ export default {
       this.activityForm = { id: null, nome: '' };
     },
     deleteActivity(id) {
-      axios.delete(`/api/activities/${id}`)
+      axios.delete(`http://localhost:5000/api/atividade/${id}`)
         .then(() => {
           this.fetchData();
         });

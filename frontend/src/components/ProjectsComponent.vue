@@ -55,7 +55,7 @@ export default {
   },
   methods: {
     fetchProjects() {
-      axios.get('/api/projects')
+      axios.get('http://localhost:5000/projeto')
         .then(response => {
           this.projects = response.data;
         });
@@ -72,7 +72,7 @@ export default {
       this.isEditing = false;
     },
     createProject() {
-      axios.post('/api/projects', this.form)
+      axios.post('http://localhost:5000/api/projeto', this.form)
         .then(() => {
           this.fetchProjects();
           this.showForm = false;
@@ -84,14 +84,14 @@ export default {
       this.isEditing = true;
     },
     updateProject() {
-      axios.put(`/api/projects/${this.form.id}`, this.form)
+      axios.put(`http://localhost:5000/api/projeto/${this.form.id}`, this.form)
         .then(() => {
           this.fetchProjects();
           this.showForm = false;
         });
     },
     deleteProject(id) {
-      axios.delete(`/api/projects/${id}`)
+      axios.delete(`http://localhost:5000/api/projeto/${id}`)
         .then(() => {
           this.fetchProjects();
         });
