@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from model.projeto import *
+from src.model.projeto import *
 
 router_projeto = APIRouter()
 

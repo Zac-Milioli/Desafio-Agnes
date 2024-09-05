@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from model.atividade import *
+from src.model.atividade import *
 
 router_atividade = APIRouter()
 
