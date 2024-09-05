@@ -1,19 +1,25 @@
 <template>
   <div class="projects-container">
-    <h1>Meus Projetos</h1>
-    <button class="create-button" @click="showCreateProjectForm">Criar Projeto</button>
+    <div class="header-bar">
+      <h1>Meus Projetos</h1>
+    </div>
+    <div class="button-container">
+      <button class="create-button" @click="showCreateProjectForm">Criar Projeto</button>
+    </div>
 
-    <div v-for="status in projectStatuses" :key="status" class="status-section">
-      <h2>{{ status }}</h2>
-      <div class="cards-container">
-        <div v-for="project in filteredProjects(status)" :key="project.id" class="project-card">
-          <div @click="goToClientsActivities(project)" class="card-content">
-            <h3>{{ project.nome }}</h3>
-            <p>Status: {{ project.status }}</p>
-          </div>
-          <div class="card-actions">
-            <button @click="editProject(project)">Editar</button>
-            <button @click="deleteProject(project.id)">Excluir</button>
+    <div class="status-columns">
+      <div v-for="status in projectStatuses" :key="status" class="status-section">
+        <h2>{{ status }}</h2>
+        <div class="cards-container">
+          <div v-for="project in filteredProjects(status)" :key="project.id" class="project-card">
+            <div @click="goToClientsActivities(project)" class="card-content">
+              <h3>{{ project.nome }}</h3>
+              <p>Status: {{ project.status }}</p>
+            </div>
+            <div class="card-actions">
+              <button @click="editProject(project)">Editar</button>
+              <button @click="deleteProject(project.id)">Excluir</button>
+            </div>
           </div>
         </div>
       </div>
@@ -30,8 +36,10 @@
           <option v-for="status in projectStatuses" :key="status" :value="status">{{ status }}</option>
         </select>
 
-        <button type="submit">{{ isEditing ? 'Salvar' : 'Criar' }}</button>
-        <button type="button" @click="cancelForm">Cancelar</button>
+        <div class="form-buttons">
+          <button type="submit">{{ isEditing ? 'Salvar' : 'Criar' }}</button>
+          <button type="button" @click="cancelForm">Cancelar</button>
+        </div>
       </form>
     </div>
   </div>
@@ -42,7 +50,13 @@ export default {
   name: 'ProjectsComponent',
   data() {
     return {
-      projects: [],
+      projects: [
+        { id: 1, nome: 'Projeto A', status: 'Em andamento' },
+        { id: 2, nome: 'Projeto B', status: 'Concluído' },
+        { id: 3, nome: 'Projeto C', status: 'Cancelado' },
+        { id: 4, nome: 'Projeto D', status: 'Em andamento' },
+        { id: 5, nome: 'Projeto E', status: 'Concluído' }
+      ],
       projectStatuses: ['Em andamento', 'Concluído', 'Cancelado'],
       showForm: false,
       isEditing: false,
@@ -53,19 +67,7 @@ export default {
       }
     };
   },
-  created() {
-    this.fetchProjects();
-  },
   methods: {
-    fetchProjects() {
-      this.$axios.get('/projeto')
-        .then(response => {
-          this.projects = response.data;
-        })
-        .catch(error => {
-          console.error('Erro ao buscar projetos:', error);
-        });
-    },
     filteredProjects(status) {
       return this.projects.filter(project => project.status === status);
     },
@@ -78,14 +80,13 @@ export default {
       this.isEditing = false;
     },
     createProject() {
-      this.$axios.post('/api/projeto', this.form)
-        .then(() => {
-          this.fetchProjects();
-          this.showForm = false;
-        })
-        .catch(error => {
-          console.error('Erro ao criar projeto:', error);
-        });
+      const newProject = {
+        id: this.projects.length + 1,
+        nome: this.form.nome,
+        status: this.form.status
+      };
+      this.projects.push(newProject);
+      this.showForm = false;
     },
     editProject(project) {
       this.form = { ...project };
@@ -93,23 +94,14 @@ export default {
       this.isEditing = true;
     },
     updateProject() {
-      this.$axios.put(`/api/projeto/${this.form.id}`, this.form)
-        .then(() => {
-          this.fetchProjects();
-          this.showForm = false;
-        })
-        .catch(error => {
-          console.error('Erro ao atualizar projeto:', error);
-        });
+      const index = this.projects.findIndex(p => p.id === this.form.id);
+      if (index !== -1) {
+        this.projects.splice(index, 1, { ...this.form });
+      }
+      this.showForm = false;
     },
     deleteProject(id) {
-      this.$axios.delete(`/api/projeto/${id}`)
-        .then(() => {
-          this.fetchProjects();
-        })
-        .catch(error => {
-          console.error('Erro ao excluir projeto:', error);
-        });
+      this.projects = this.projects.filter(project => project.id !== id);
     },
     cancelForm() {
       this.showForm = false;
@@ -126,27 +118,69 @@ export default {
 </script>
 
 <style scoped>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 .projects-container {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
+  padding: 0; /* Remove padding */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Garante que o contêiner ocupe toda a altura da tela */
+  position: relative; /* Para posicionamento do formulário */
+}
+
+.header-bar {
+  background-color: #0078d4; /* Azul da Microsoft */
+  color: white;
   padding: 20px;
+  text-align: left; /* Alinha o título à esquerda */
+}
+
+.header-bar h1 {
+  margin: 0;
+  font-size: 2.5em; /* Tamanho grande do título */
+}
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Centraliza o botão horizontalmente */
+  margin: 20px 0; /* Margem maior */
 }
 
 .create-button {
   background-color: #0078d4;
   color: white;
   border: none;
-  padding: 10px 20px;
+  width: 150px; /* Largura do botão */
+  height: 50px; /* Altura do botão */
   cursor: pointer;
-  margin-bottom: 20px;
+  white-space: nowrap; /* Impede quebras de linha no texto do botão */
+  display: flex;
+  align-items: center; /* Centraliza verticalmente */
+  justify-content: center; /* Centraliza horizontalmente */
 }
 
 .create-button:hover {
   background-color: #005a9e;
 }
 
+.status-columns {
+  display: flex;
+  flex: 1; /* Faz com que o contêiner ocupe o espaço disponível */
+}
+
 .status-section {
-  margin-bottom: 40px;
+  flex: 1; /* Faz com que cada seção ocupe o espaço disponível */
+  border: 1px solid #e1dfdd; /* Adiciona a borda */
+  margin: 10px; /* Margem entre as colunas */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
 .cards-container {
@@ -195,7 +229,11 @@ export default {
   border-radius: 4px;
   padding: 20px;
   width: 300px;
-  margin-top: 20px;
+  position: absolute; /* Posicionamento absoluto */
+  top: 50px; /* Distância do topo */
+  left: 50%; /* Centraliza horizontalmente */
+  transform: translateX(-50%); /* Ajusta a posição para centralizar */
+  z-index: 10; /* Garante que o formulário fique sobre outros elementos */
 }
 
 .form-container form {
@@ -215,15 +253,25 @@ export default {
   border-radius: 4px;
 }
 
-.form-container button {
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-buttons button {
   background-color: #0078d4;
   color: white;
   border: none;
   padding: 10px;
   cursor: pointer;
+  margin-right: 10px; /* Margem entre os botões */
 }
 
-.form-container button:hover {
+.form-buttons button:last-child {
+  margin-right: 0; /* Remove a margem do último botão */
+}
+
+.form-buttons button:hover {
   background-color: #005a9e;
 }
 </style>
