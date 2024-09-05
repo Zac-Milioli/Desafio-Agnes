@@ -17,15 +17,45 @@ export default {
 </script>
 
 <style>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 .welcome {
   text-align: center;
-  margin-top: 50px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom, #0078d4, #ffffff);
 }
+
 .fade-in {
   animation: fadeIn 2s;
+  font-size: 5em; /* Título grande */
+  margin-bottom: 20px;
 }
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+button {
+  background-color: #0078d4; /* Azul da Microsoft */
+  color: white;
+  border: none;
+  padding: 15px 30px; /* Botão maior */
+  font-size: 1.2em;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #005a9e; /* Azul mais escuro ao passar o mouse */
 }
 </style>
