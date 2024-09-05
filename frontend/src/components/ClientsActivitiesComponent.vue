@@ -1,44 +1,17 @@
 <template>
-  <div>
-    <h1>Clientes e Atividades de {{ projectName }}</h1>
-    <div>
-      <h2>Clientes</h2>
-      <ul>
-        <li v-for="client in clients" :key="client.id">
-          {{ client.nome }}
-          <button @click="editClient(client)">Editar</button>
-          <button @click="deleteClient(client.id)">Excluir</button>
-        </li>
-      </ul>
-      <button @click="createClient">Criar Novo Cliente</button>
+  <div class="page-container">
+    <div class="header-bar">
+      <h1>Clientes e Atividades</h1>
     </div>
-    <div>
-      <h2>Atividades</h2>
-      <ul>
-        <li v-for="activity in activities" :key="activity.id">
-          {{ activity.nome }}
-          <button @click="editActivity(activity)">Editar</button>
-          <button @click="deleteActivity(activity.id)">Excluir</button>
-        </li>
-      </ul>
-      <button @click="createActivity">Criar Nova Atividade</button>
-    </div>
-    <!-- Formulários de criação/edição -->
-    <div v-if="showClientForm">
-      <h3>{{ isEditingClient ? 'Editar Cliente' : 'Criar Cliente' }}</h3>
-      <form @submit.prevent="submitClientForm">
-        <input v-model="clientForm.nome" placeholder="Nome do Cliente" required />
-        <button type="submit">{{ isEditingClient ? 'Salvar' : 'Criar' }}</button>
-        <button @click="cancelClientForm">Cancelar</button>
-      </form>
-    </div>
-    <div v-if="showActivityForm">
-      <h3>{{ isEditingActivity ? 'Editar Atividade' : 'Criar Atividade' }}</h3>
-      <form @submit.prevent="submitActivityForm">
-        <input v-model="activityForm.nome" placeholder="Nome da Atividade" required />
-        <button type="submit">{{ isEditingActivity ? 'Salvar' : 'Criar' }}</button>
-        <button @click="cancelActivityForm">Cancelar</button>
-      </form>
+    <div class="content">
+      <div class="column">
+        <h2>Clientes</h2>
+        <!-- Conteúdo relacionado aos clientes -->
+      </div>
+      <div class="column">
+        <h2>Atividades</h2>
+        <!-- Conteúdo relacionado às atividades -->
+      </div>
     </div>
   </div>
 </template>
@@ -48,77 +21,14 @@ export default {
   name: 'ClientsActivitiesComponent',
   data() {
     return {
-      projectName: '',
-      clients: [],
-      activities: [],
-      showClientForm: false,
       showActivityForm: false,
-      isEditingClient: false,
       isEditingActivity: false,
-      clientForm: {
-        id: null,
-        nome: ''
-      },
-      activityForm: {
-        id: null,
-        nome: ''
-      }
+      activityForm: { id: null, nome: '' }
     };
-  },
-  created() {
-    this.fetchData();
   },
   methods: {
     fetchData() {
-      const projectId = this.$route.params.id;
-      this.$axios.get(`/projeto/${projectId}`)
-        .then(response => {
-          this.projectName = response.data.nome;
-        });
-      this.$axios.get(`/projeto/${projectId}/cliente`)
-        .then(response => {
-          this.clients = response.data;
-        });
-      this.$axios.get(`/projeto/${projectId}/atividade`)
-        .then(response => {
-          this.activities = response.data;
-        });
-    },
-    createClient() {
-      this.showClientForm = true;
-      this.isEditingClient = false;
-      this.clientForm = { id: null, nome: '' };
-    },
-    editClient(client) {
-      this.showClientForm = true;
-      this.isEditingClient = true;
-      this.clientForm = { ...client };
-    },
-    submitClientForm() {
-      const projectId = this.$route.params.id;
-      if (this.isEditingClient) {
-        this.$axios.put(`/api/cliente/${this.clientForm.id}`, this.clientForm)
-          .then(() => {
-            this.fetchData();
-            this.cancelClientForm();
-          });
-      } else {
-        this.$axios.post(`/api/cliente`, { ...this.clientForm, projeto_id: projectId })
-          .then(() => {
-            this.fetchData();
-            this.cancelClientForm();
-          });
-      }
-    },
-    cancelClientForm() {
-      this.showClientForm = false;
-      this.clientForm = { id: null, nome: '' };
-    },
-    deleteClient(id) {
-      this.$axios.delete(`/api/cliente/${id}`)
-        .then(() => {
-          this.fetchData();
-        });
+      // Implementação da função fetchData
     },
     createActivity() {
       this.showActivityForm = true;
@@ -159,3 +69,54 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header-bar {
+  background-color: #0078d4; /* Azul da Microsoft */
+  color: white;
+  padding: 10px 20px;
+}
+
+.header-bar h1 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  padding: 10px;
+}
+
+button {
+  background-color: #0078d4; /* Azul da Microsoft */
+  color: white;
+  border: none;
+  padding: 10px; /* Reduzido o tamanho dos botões */
+  font-size: 1em;
+  cursor: pointer;
+  border-radius: 0; /* Tornar os botões quadrados */
+  margin: 10px; /* Aumentar as margens dos botões */
+}
+
+button:hover {
+  background-color: #005a9e; /* Azul mais escuro ao passar o mouse */
+}
+</style>

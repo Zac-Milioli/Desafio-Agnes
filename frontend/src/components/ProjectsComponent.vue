@@ -52,7 +52,9 @@ export default {
   name: 'ProjectsComponent',
   data() {
     return {
-      projects: [], // Lista de projetos inicializada vazia
+      projects: [
+        {"id": 1, "nome": "Mock", "status": "Em andamento"}
+      ], // Lista de projetos inicializada vazia
       projectStatuses: ['Em andamento', 'Concluído', 'Cancelado'],
       showForm: false,
       isEditing: false,
@@ -75,29 +77,45 @@ export default {
       this.showForm = true;
       this.isEditing = false;
     },
-    createProject() {
-      const newProject = {
-        id: this.projects.length + 1,
-        nome: this.form.nome,
-        status: this.form.status
-      };
-      this.projects.push(newProject);
-      this.showForm = false;
+    async createProject() {
+      try {
+        const response = await axios.post('http://127.0.0.1:5000/api/projeto', {
+          nome: this.form.nome,
+          status: this.form.status
+        });
+        this.projects.push(response.data);
+        this.showForm = false;
+      } catch (error) {
+        console.error('Erro ao criar projeto:', error);
+      }
     },
     editProject(project) {
       this.form = { ...project };
       this.showForm = true;
       this.isEditing = true;
     },
-    updateProject() {
-      const index = this.projects.findIndex(p => p.id === this.form.id);
-      if (index !== -1) {
-        this.projects.splice(index, 1, { ...this.form });
+    async updateProject() {
+      try {
+        const response = await axios.put(`http://127.0.0.1:5000/api/projeto/${this.form.id}`, {
+          nome: this.form.nome,
+          status: this.form.status
+        });
+        const index = this.projects.findIndex(p => p.id === this.form.id);
+        if (index !== -1) {
+          this.projects.splice(index, 1, response.data);
+        }
+        this.showForm = false;
+      } catch (error) {
+        console.error('Erro ao atualizar projeto:', error);
       }
-      this.showForm = false;
     },
-    deleteProject(id) {
-      this.projects = this.projects.filter(project => project.id !== id);
+    async deleteProject(id) {
+      try {
+        await axios.delete(`http://127.0.0.1:5000/api/projeto/${id}`);
+        this.projects = this.projects.filter(project => project.id !== id);
+      } catch (error) {
+        console.error('Erro ao excluir projeto:', error);
+      }
     },
     cancelForm() {
       this.showForm = false;
@@ -111,7 +129,7 @@ export default {
     },
     async fetchProjects() {
       try {
-        const response = await axios.get('http://localhost:5000/projects'); // Ajuste a URL conforme necessário
+        const response = await axios.get('http://127.0.0.1:5000/projeto');
         this.projects = response.data;
       } catch (error) {
         console.error('Erro ao buscar projetos:', error);
