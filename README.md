@@ -2,7 +2,7 @@
 
 ## REST
 
-A documentação da API REST pode ser encontrada em [Documentação REST](docs\Documentação REST.pdf)
+A documentação da API REST pode ser encontrada em [Documentação REST](https://github.com/Zac-Milioli/Desafio-Agnes/blob/master/docs/Documentação%20REST.pdf)
 
 
 ## BACKEND
