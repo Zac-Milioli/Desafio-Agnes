@@ -1,5 +1,10 @@
 # FUNCIONAMENTO
 
+## REST
+
+A documentação da API REST pode ser encontrada em [Documentação REST](docs\Documentação REST.pdf)
+
+
 ## BACKEND
 
 Para utilizar o backend, basta navegar até a pasta `backend` usando o terminal
