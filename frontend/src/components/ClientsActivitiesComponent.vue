@@ -25,6 +25,7 @@
         <div class="cards-container">
           <div v-for="activity in filteredActivities" :key="activity.id" class="card">
             <h3>{{ activity.nome }}</h3>
+            <p>Cliente: {{ getClientName(activity.cliente_id) }}</p>
             <button @click="editActivity(activity)">Editar</button>
             <button @click="deleteActivity(activity.id)">Excluir</button>
           </div>
@@ -109,6 +110,10 @@ export default {
       } catch (error) {
         console.error('Erro ao buscar atividades do cliente:', error);
       }
+    },
+    getClientName(clientId) {
+      const client = this.clients.find(client => client.id === clientId);
+      return client ? client.nome : 'Desconhecido';
     },
     selectClient(client) {
       this.selectedClient = client;
