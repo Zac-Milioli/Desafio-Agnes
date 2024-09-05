@@ -57,7 +57,8 @@ class Projeto(BaseModel):
             atividade = {
                 'id': row[0],
                 'nome': row[1],
-                'projeto_id': row[2]
+                'projeto_id': row[2],
+                'cliente_id': row[3]
             }
             data.append(atividade)
         return data
