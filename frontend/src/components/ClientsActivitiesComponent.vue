@@ -20,7 +20,7 @@
       <div class="column bordered">
         <div class="section-header">
           <h2>{{ selectedClient ? `Atividades de ${selectedClient.nome}` : 'Todas as atividades do projeto' }}</h2>
-          <button @click="showCreateActivityForm" :disabled="!selectedClient">Adicionar Atividade</button>
+          <button v-if="selectedClient" @click="showCreateActivityForm">Adicionar Atividade</button>
         </div>
         <div class="cards-container">
           <div v-for="activity in filteredActivities" :key="activity.id" class="card">
