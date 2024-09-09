@@ -51,5 +51,5 @@ npm install
 Após instalar as dependências, basta rodar o servidor
 
 ```bash
-npm start
+npm run serve
 ```
